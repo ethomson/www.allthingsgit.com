@@ -1,0 +1,151 @@
+---
+layout: default
+title: The Podcast About Git
+---
+{% for post in site.categories.episodes %}
+	{% assign recent_episode = post %}
+	{% break %}
+{% endfor %}
+
+<main id="frontpage" class="fullwidth">
+	<div id="fullheight">
+		<div class="container">
+			<section>
+				<div id="intro">
+					<div class="logo"></div>
+					<div class="description">
+						<h2>The podcast about Git</h2>
+
+						<nav id="external" class="linkbar">
+							<ul>
+								<!--
+								<li id="itunes"><a href="#" target="_blank">iTunes</a></li>
+								<li id="soundcloud"><a href="#" target="_blank">SoundCloud</a></li>
+								-->
+								<li id="rss"><a href="/rss.xml" target="_blank">RSS</a></li>
+								<li id="facebook"><a href="https://facebook.com/allthingsgit" target="_blank">Facebook</a></li>
+								<li id="twitter"><a href="https://twitter.com/allthingsgit" target="_blank">Twitter</a></li>
+							</ul>
+						</nav>
+					</div>
+				</div>
+			</section>
+
+			{% if recent_episode %}
+		    {% if recent_episode.number == "0" %}
+		    {% assign recent_title = "Introduction" %}
+		    {% else %}
+		    {% assign recent_title = recent_episode.number | prepend: "Episode " %}
+		    {% endif %}
+			<div class="episode">
+				<section class="episode">
+					<div class="episode_metadata">
+						<span class="number">{{recent_title}}</span>
+						<span class="separator">&bull;</span>
+						<span class="date">{{recent_episode.date | date: '%B %-d, %Y'}}</span>
+					</div>
+
+					<div class="episode_title">
+						<h3><a href="{{recent_episode.url}}">{{recent_episode.title}}</a></h3>
+					</div>
+				</section>
+			</div>
+			{% endif %}
+		</div>
+	</div>
+
+	{% if recent_episode %}
+	<div id="featured_player" class="player">
+		<section>
+			<div class="controls">
+				<audio controls preload="metadata" width="685" height="60" src="{{recent_episode.mp3}}" type="audio/mp3" controls="controls"></audio>
+			</div>
+			<a href="{{recent_episode.mp3}}">
+				<div class="download">Download</div>
+			</a>
+		</section>
+	</div>
+	{% endif %}
+
+	{% for post in site.categories.episodes limit:3 %}
+    {% if forloop.index == 1 %}
+    {% continue %}
+    {% endif %}
+    {% if post.number == "0" %}
+    {% continue %}
+    {% endif %}
+    {% capture bgclass %}{% cycle 'dark', 'light' %}{% endcapture %}
+	<div class="episode {{ bgclass }}">
+		<section>
+			<div class="episode_metadata">
+				<span class="number">Episode {{post.number}}</span>
+				<span class="separator">&bull;</span>
+				<span class="date">{{post.date | date: '%B %-d, %Y'}}</span>
+			</div>
+			<div class="episode_title">
+				<h3><a href="{{post.url}}">{{post.title}}</a></h3>
+			</div>
+
+			<div class="episode_player player">
+				<div class="controls">
+					<audio controls preload="metadata" width="685" height="60" src="{{recent_episode.mp3}}" type="audio/mp3" controls="controls"></audio>
+				</div>
+				<div class="download">
+					<a href="{{recent_episode.mp3}}">Download</a>
+				</div>
+			</div>
+		</section>
+	</div>
+	{% endfor %}
+
+	{% for post in site.categories.blog limit:1 %}
+    {% if bgclass == 'light' %}
+    {% assign bgclass = 'dark' %}
+    {% else %}
+    {% assign bgclass = 'light' %}
+    {% endif %}
+	<div class="blog {{ bgclass }}">
+		<section>
+			<div>
+				<span class="date">{{post.date | date: '%B %-d, %Y'}}</span>
+			</div>
+			<div class="blog_title">
+				<h3><a href="{{post.url}}">{{post.title}}</a></h3>
+			</div>
+
+			<p>
+				{% if post.content contains '<!--summary-->' %}
+				{% assign summary_parts = post.content | split:'<!--summary-->' %}
+				{{ summary_parts[1] | split:'<!--/summary-->' | first }}
+				{% else %}
+				{{post.content | split:'<!--break-->' | first}}
+				{% endif %}
+			</p>
+
+			<nav class="linkbar">
+				<ul>
+					<li class="details"><a href="{{post.url}}">Read More...</a></li>
+				</ul>
+			</nav>
+		</section>
+	</div>
+	{% endfor %}
+
+	<div class="about">
+		<section>
+			<h3>About the Podcast</h3>
+
+			<p>
+				All Things Git is the podcast about Git.  We talk to
+				the people who build Git, who create tools for it and
+				who teach people how to use it.  We bring you a new
+				episode every two weeks, discussing the Git version
+				control system with a guest.  Subscribe to the podcast
+                on our <a href="/rss.xml">RSS</a>,
+                on iTunes or SoundCloud.  And be sure to follow us on
+                <a href="https://twitter.com/allthingsgit">Twitter</a> and
+                <a href="https://www.facebook.com/allthingsgit">Facebook</a>.
+			</p>
+		</section>
+	</div>
+</main>

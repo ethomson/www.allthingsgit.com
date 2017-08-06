@@ -1,0 +1,63 @@
+---
+layout: default
+---
+{% if page.summary %}
+{% assign description = page.summary | markdownify | strip_html | strip %}
+{% else %}
+{% assign description = content | split:'<!--break-->' | first %}
+{% assign description = description | strip_html | truncatewords:50 %}
+{% endif %}
+{% assign description = description | newline_to_space | replace: '"', "'" %}
+
+{% if page.image %}
+{% assign image = page.image | canonicalize_url: site.url %}
+{% else %}
+{% assign image = 'http://www.allthingsgit.com/images/logo-dark.png' %}
+{% endif %}
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@allthingsgit">
+<meta name="twitter:title" content="{{page.title}}">
+<meta name="twitter:description" content="{{description}}">
+<meta name="twitter:image" content="{{image}}">
+
+<meta name="og:url" content="{{site.url}}{{page.url}}">
+<meta name="og:title" content="{{page.title}}">
+<meta name="og:description" content="{{description}}">
+<meta name="og:image" content="{{image}}">
+
+<main class="fullwidth post">
+	<div id="intro">
+		<section>
+			<div class="logo"></div>
+			<div class="description">
+				<h2>
+					{{page.title}}
+				</h2>
+
+				<p class="date">
+					{{page.date | date: '%B %-d, %Y'}}
+				</p>
+			</div>
+		</section>
+	</div>
+
+	{% if page.mp3 %}
+	<div id="episode_player" class="dark player">
+		<section>
+			<div class="controls">
+				<audio controls preload="metadata" width="685" height="60" src="{{page.mp3}}" type="audio/mp3" controls="controls"></audio>
+			</div>
+			<a href="{{page.mp3}}">
+				<div class="download">Download</div>
+			</a>
+		</section>
+	</div>
+	{% endif %}
+
+	<div class="main">
+		<section>
+			{{content}}
+		</section>
+	</div>
+</main>
